@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="he">
+  <head>
+    <meta charset="UTF-8" />
+    <title>BallotForge – הצבעה</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+      }
+      .box {
+        max-width: 400px;
+        margin: 60px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 8px;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+      }
+      .msg {
+        margin-top: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <h2>🗳️ הצבעה</h2>
+
+      <label>
+        <input type="radio" name="choice" value="Option A" /> Option A </label
+      ><br />
+      <label>
+        <input type="radio" name="choice" value="Option B" /> Option B
+      </label>
+
+      <button onclick="submitVote()">שלח הצבעה</button>
+
+      <div class="msg" id="message"></div>
+    </div>
+
+    <script src="app.js?v=3"></script>
+  </body>
+</html>

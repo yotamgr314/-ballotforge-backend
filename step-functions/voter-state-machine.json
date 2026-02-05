@@ -1,0 +1,66 @@
+{
+  "Comment": "BallotForge Voting Flow",
+  "StartAt": "ValidateVote",
+  "States": {
+    "ValidateVote": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:eu-west-1:812789130814:function:bf_validate_vote",
+      "ResultPath": "$.validation",
+      "Next": "IsValidVote"
+    },
+
+    "IsValidVote": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.validation.valid",
+          "BooleanEquals": true,
+          "Next": "RegisterVote"
+        }
+      ],
+      "Default": "InvalidVote"
+    },
+
+    "RegisterVote": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:eu-west-1:812789130814:function:bf_register_vote",
+      "ResultPath": "$.registration",
+      "Next": "IsVoteRegistered"
+    },
+
+    "IsVoteRegistered": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.registration.registered",
+          "BooleanEquals": true,
+          "Next": "UpdateTally"
+        }
+      ],
+      "Default": "DuplicateVote"
+    },
+
+    "UpdateTally": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:eu-west-1:812789130814:function:bf_update_tally",
+      "ResultPath": "$.tally",
+      "Next": "PublishUpdate"
+    },
+
+    "PublishUpdate": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:eu-west-1:812789130814:function:bf_publish_update",
+      "End": true
+    },
+
+    "InvalidVote": {
+      "Type": "Succeed",
+      "Comment": "Vote rejected – invalid input"
+    },
+
+    "DuplicateVote": {
+      "Type": "Succeed",
+      "Comment": "Vote rejected – duplicate vote"
+    }
+  }
+}
